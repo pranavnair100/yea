@@ -1,13 +1,25 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Confetti from "react-confetti";
+import { useWindowSize } from "react-use";
 
 export default function Page() {
   const [noCount, setNoCount] = useState(0);
   const [yesPressed, setYesPressed] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
   const yesButtonSize = noCount * 20 + 16;
+  const { width, height } = useWindowSize();
 
   const handleNoClick = () => {
     setNoCount(noCount + 1);
+  };
+
+  const handleYesClick = () => {
+    setYesPressed(true); // Show the new page first
+    setTimeout(() => {
+      setShowConfetti(true); // Start confetti after the new page appears
+      setTimeout(() => setShowConfetti(false), 8000); // Stop confetti after 8 seconds
+    }, 100); // Delay to ensure the new page renders before confetti starts
   };
 
   const getNoButtonText = () => {
@@ -15,30 +27,55 @@ export default function Page() {
       "No",
       "Are you sure?",
       "What if I asked really nicely?",
+      "I'll buy you some Taco Bell",
       "Pretty please",
-      "With a chocolate rice cake on top",
-      "What about a matcha frostie",
-      "PLEASE POOKIE",
       "But :*(",
-      "I am going to die",
-      "Yep im dead",
-      "ok ur talking to nathan's ghost",
-      "please babe",
-      ":((((",
-      "PRETTY PLEASE",
+      "PLEASE BRO",
+      "Yep, I'm dead",
+      "Ight, you're talking to my ghost",
+      ":(((",
       "Estoy muerto",
-      "No :(",
+      "No :("
     ];
 
     return phrases[Math.min(noCount, phrases.length - 1)];
   };
 
   return (
-    <div className="-mt-16 flex h-screen flex-col items-center justify-center">
+    <div className="min-h-screen min-w-screen bg-pink-500 flex flex-col items-center justify-center">
+      {/* Confetti */}
+      {showConfetti && <Confetti width={width} height={height} />}
+
       {yesPressed ? (
         <>
-          <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" />
-          <div className="my-4 text-4xl font-bold">WOOOOOO!!! I love you pookie!! ;))</div>
+          <div className="flex flex-wrap justify-center gap-4">
+            {/* Add multiple images or GIFs here */}
+            {[
+              "https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif", // Another direct Tenor GIF
+            ].map((src, index) => (
+              <img
+                key={index}
+                src={src}
+                alt={`valentine-${index}`}
+                className="w-[200px] rounded-md shadow-md"
+              />
+            ))}
+          </div>
+          <div className="my-4 text-4xl font-bold text-white">
+            I LOVE YOU THANK YOU FOR BEING MY VALENTINE FOR THE THIRD TIME!!!!
+          </div>
+          <div className="mt-4">
+            <iframe
+              style={{ borderRadius: "12px" }}
+              src="https://open.spotify.com/embed/track/2plbrEY59IikOBgBGLjaoe?utm_source=generator"
+              width="100%"
+              height="152"
+              frameBorder="0"
+              allowFullScreen=""
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+            ></iframe>
+          </div>
         </>
       ) : (
         <>
@@ -51,7 +88,7 @@ export default function Page() {
             <button
               className={`mr-4 rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700`}
               style={{ fontSize: yesButtonSize }}
-              onClick={() => setYesPressed(true)}
+              onClick={handleYesClick}
             >
               Yes
             </button>
